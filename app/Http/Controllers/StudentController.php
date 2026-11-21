@@ -8,6 +8,25 @@ use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
+    // Validation rules (DRY)
+    private function rules(?Student $student = null): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('students', 'email')->ignore($student?->id),
+            ],
+
+            'phone' => 'required|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'date_of_birth' => 'nullable|date',
+        ];
+    }
+
     // Display all students
     public function index()
     {
@@ -16,7 +35,7 @@ class StudentController extends Controller
         return view('students.index', compact('students'));
     }
 
-    // Display the student registration form
+    // Display registration form
     public function create()
     {
         return view('students.create');
@@ -25,15 +44,9 @@ class StudentController extends Controller
     // Save a new student
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:students,email',
-            'phone' => 'required|string|max:20',
-            'address' => 'nullable|string|max:500',
-            'date_of_birth' => 'nullable|date',
-        ]);
+        $validatedData = $request->validate($this->rules());
 
-        Student::create($validatedData);
+        $student = Student::create($validatedData);
 
         return redirect()
             ->route('students.index')
@@ -46,7 +59,7 @@ class StudentController extends Controller
         return view('students.show', compact('student'));
     }
 
-    // Display the edit form
+    // Display edit form
     public function edit(Student $student)
     {
         return view('students.edit', compact('student'));
@@ -55,18 +68,7 @@ class StudentController extends Controller
     // Update student information
     public function update(Request $request, Student $student)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('students', 'email')->ignore($student->id),
-            ],
-            'phone' => 'required|string|max:20',
-            'address' => 'nullable|string|max:500',
-            'date_of_birth' => 'nullable|date',
-        ]);
+        $validatedData = $request->validate($this->rules($student));
 
         $student->update($validatedData);
 

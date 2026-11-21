@@ -15,4 +15,13 @@ class Course extends Model
         'difficulty',
         'is_active',
     ];
+
+    // Automatically convert database values into correct types
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'fee' => 'decimal:2',
+        ];
+    }
 }

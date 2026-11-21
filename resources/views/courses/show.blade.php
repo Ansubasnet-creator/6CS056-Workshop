@@ -1,91 +1,55 @@
+<x-layouts.app title="Course Details">
+    <div class="card">
+        <h1>Course Details</h1>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Course Details</title>
+        <div class="detail">
+            <strong>Course ID:</strong>
+            {{ $course->id }}
+        </div>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f4f6f9;
-        }
+        <div class="detail">
+            <strong>Course Name:</strong>
+            {{ $course->name }}
+        </div>
 
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-        }
+        <div class="detail">
+            <strong>Description:</strong>
+            {{ $course->description }}
+        </div>
 
-        h1 {
-            color: #333;
-        }
+        <div class="detail">
+            <strong>Duration:</strong>
+            {{ $course->duration }} Weeks
+        </div>
 
-        p {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
+        <div class="detail">
+            <strong>Course Fee:</strong>
+            {{ $course->fee }}
+        </div>
 
-        a {
-            display: inline-block;
-            margin-top: 15px;
-            margin-right: 15px;
-        }
-    </style>
-</head>
+        <div class="detail">
+            <strong>Difficulty:</strong>
+            {{ $course->difficulty }}
+        </div>
 
-<body>
+        <div class="detail">
+            <strong>Status:</strong>
+            {{ $course->is_active ? 'Active' : 'Inactive' }}
+        </div>
 
-<div class="container">
+        <div class="detail">
+            <strong>Created At:</strong>
+            {{ $course->created_at->format('d M Y, h:i A') }}
+        </div>
 
-    <h1>Course Details</h1>
+        <a href="{{ route('courses.edit', $course) }}"
+           class="btn btn-success">
+            Edit Course
+        </a>
 
-    <p>
-        <strong>ID:</strong>
-        {{ $course->id }}
-    </p>
-
-    <p>
-        <strong>Course Name:</strong>
-        {{ $course->name }}
-    </p>
-
-    <p>
-        <strong>Description:</strong>
-        {{ $course->description }}
-    </p>
-
-    <p>
-        <strong>Duration:</strong>
-        {{ $course->duration }} weeks
-    </p>
-
-    <p>
-        <strong>Fee:</strong>
-        {{ $course->fee }}
-    </p>
-
-    <p>
-        <strong>Difficulty:</strong>
-        {{ $course->difficulty }}
-    </p>
-
-    <p>
-        <strong>Status:</strong>
-        {{ $course->is_active ? 'Active' : 'Inactive' }}
-    </p>
-
-    <a href="{{ route('courses.edit', $course->id) }}">
-        Edit Course
-    </a>
-
-    <a href="{{ route('courses.index') }}">
-        Back to Courses
-    </a>
-
-</div>
-
-</body>
-</html>
+        <a href="{{ route('courses.index') }}"
+           class="btn btn-secondary">
+            Back to Courses
+        </a>
+    </div>
+</x-layouts.app>

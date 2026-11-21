@@ -8,6 +8,25 @@ use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
 {
+    // Reusable validation rules (DRY)
+    private function rules(?Course $course = null): array
+    {
+        return [
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('courses', 'name')->ignore($course?->id),
+            ],
+
+            'description' => 'required|string|max:1000',
+            'duration' => 'required|integer|min:1',
+            'fee' => 'required|numeric|min:0',
+            'difficulty' => ['required', Rule::in(['Easy', 'Medium', 'Hard'])],
+            'is_active' => 'required|boolean',
+        ];
+    }
+
     // Display all courses
     public function index()
     {
@@ -16,7 +35,7 @@ class CourseController extends Controller
         return view('courses.index', compact('courses'));
     }
 
-    // Display the course creation form
+    // Display course creation form
     public function create()
     {
         return view('courses.create');
@@ -25,14 +44,7 @@ class CourseController extends Controller
     // Store a new course
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:courses,name',
-            'description' => 'required|string|max:1000',
-            'duration' => 'required|integer|min:1',
-            'fee' => 'required|numeric|min:0',
-            'difficulty' => 'required|in:Easy,Medium,Hard',
-            'is_active' => 'required|boolean',
-        ]);
+        $validatedData = $request->validate($this->rules());
 
         Course::create($validatedData);
 
@@ -47,28 +59,16 @@ class CourseController extends Controller
         return view('courses.show', compact('course'));
     }
 
-    // Display the edit form
+    // Display edit form
     public function edit(Course $course)
     {
         return view('courses.edit', compact('course'));
     }
 
-    // Update a course
+    // Update course
     public function update(Request $request, Course $course)
     {
-        $validatedData = $request->validate([
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('courses', 'name')->ignore($course->id),
-            ],
-            'description' => 'required|string|max:1000',
-            'duration' => 'required|integer|min:1',
-            'fee' => 'required|numeric|min:0',
-            'difficulty' => 'required|in:Easy,Medium,Hard',
-            'is_active' => 'required|boolean',
-        ]);
+        $validatedData = $request->validate($this->rules($course));
 
         $course->update($validatedData);
 
@@ -77,7 +77,7 @@ class CourseController extends Controller
             ->with('success', 'Course updated successfully!');
     }
 
-    // Delete a course
+    // Delete course
     public function destroy(Course $course)
     {
         $course->delete();

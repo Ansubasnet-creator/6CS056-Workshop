@@ -1,110 +1,55 @@
+<x-layouts.app title="Student Details">
+    <div class="card">
+        <h1>Student Details</h1>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Details</title>
+        <div class="detail">
+            <strong>Student ID:</strong>
+            {{ $student->id }}
+        </div>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            padding: 30px;
-        }
+        <div class="detail">
+            <strong>Full Name:</strong>
+            {{ $student->name }}
+        </div>
 
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-        }
+        <div class="detail">
+            <strong>Email:</strong>
+            {{ $student->email }}
+        </div>
 
-        h1 {
-            color: #263238;
-        }
+        <div class="detail">
+            <strong>Phone:</strong>
+            {{ $student->phone }}
+        </div>
 
-        .detail {
-            padding: 12px 0;
-            border-bottom: 1px solid #ddd;
-        }
+        <div class="detail">
+            <strong>Address:</strong>
+            {{ $student->address ?? 'Not provided' }}
+        </div>
 
-        .label {
-            font-weight: bold;
-            color: #555;
-        }
+        <div class="detail">
+            <strong>Date of Birth:</strong>
+            {{ $student->date_of_birth?->format('d M Y') ?? 'Not provided' }}
+        </div>
 
-        .edit-button {
-            display: inline-block;
-            margin-top: 20px;
-            background: #2563eb;
-            color: white;
-            padding: 10px 16px;
-            text-decoration: none;
-            border-radius: 5px;
-        }
+        <div class="detail">
+            <strong>Age:</strong>
+            {{ $student->age ?? 'Not available' }}
+        </div>
 
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            margin-left: 10px;
-            color: #2563eb;
-        }
-    </style>
-</head>
+        <div class="detail">
+            <strong>Created At:</strong>
+            {{ $student->created_at->format('d M Y, h:i A') }}
+        </div>
 
-<body>
+        <a href="{{ route('students.edit', $student) }}"
+           class="btn btn-success">
+            Edit Student
+        </a>
 
-<div class="container">
-
-    <h1>Student Details</h1>
-
-    <div class="detail">
-        <span class="label">Student ID:</span>
-        {{ $student->id }}
+        <a href="{{ route('students.index') }}"
+           class="btn btn-secondary">
+            Back to Student List
+        </a>
     </div>
-
-    <div class="detail">
-        <span class="label">Full Name:</span>
-        {{ $student->name }}
-    </div>
-
-    <div class="detail">
-        <span class="label">Email:</span>
-        {{ $student->email }}
-    </div>
-
-    <div class="detail">
-        <span class="label">Phone:</span>
-        {{ $student->phone }}
-    </div>
-
-    <div class="detail">
-        <span class="label">Address:</span>
-        {{ $student->address ?? 'Not provided' }}
-    </div>
-
-    <div class="detail">
-        <span class="label">Date of Birth:</span>
-        {{ $student->date_of_birth ?? 'Not provided' }}
-    </div>
-
-    <div class="detail">
-        <span class="label">Created At:</span>
-        {{ $student->created_at->format('d M Y, h:i A') }}
-    </div>
-
-    <a href="{{ route('students.edit', $student->id) }}"
-       class="edit-button">
-        Edit Student
-    </a>
-
-    <a href="{{ route('students.index') }}" class="back-link">
-        ← Back to Student List
-    </a>
-
-</div>
-
-</body>
-</html>
+</x-layouts.app>

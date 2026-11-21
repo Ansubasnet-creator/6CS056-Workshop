@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Student extends Model
 {
@@ -13,4 +14,20 @@ class Student extends Model
         'address',
         'date_of_birth',
     ];
+
+    // Automatically convert date_of_birth into a date object
+    protected function casts(): array
+    {
+        return [
+            'date_of_birth' => 'date',
+        ];
+    }
+
+    // Automatically calculate student's age
+    protected function age(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->date_of_birth?->age
+        );
+    }
 }
